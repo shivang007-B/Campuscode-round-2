@@ -1,24 +1,14 @@
 "use client"
 
-// Astro Association Template — a complete landing page for an astronomy club,
-// set like a Swiss space poster: a giant wordmark filled with confetti
-// bubbles, a compass-ring logo whose arrow follows the pointer, a bubble band
-// with the mark knocked out of it, crossing ribbons over oversized type,
-// projects, observation nights with a live moon-phase widget, membership with
-// a personalised member card, and a bubble-band footer — all inside a
-// periwinkle frame.
-//
-// The bubbles are a seeded canvas field: they drift, scatter from the pointer
-// and pop when clicked. Four palettes ship (cobalt, aurora, nebula, solar),
-// switchable from the nav, or pass your own.
-//
+// CampusCode — The Student Hackathon Arena
+// Built for student builders, innovators, and hackathon competitors.
 // Every picture is drawn in this file (canvas + SVG). Nothing loads at runtime.
 import * as React from "react"
 
 /* ------------------------------------------------------------------ types */
 
-export type AstroNavLink = { label: string; /** A section key ("mission") or any href. */ target: string }
-export type AstroPalette = {
+export type CampusCodeNavLink = { label: string; /** A section key ("mission") or any href. */ target: string }
+export type CampusCodePalette = {
   name: string
   /** Type, buttons, rules. */
   accent: string
@@ -27,8 +17,8 @@ export type AstroPalette = {
   /** Bubble colours. The first is the ground the others sit on. */
   colors: string[]
 }
-export type AstroPaletteName = "cobalt" | "aurora" | "nebula" | "solar"
-export type AstroHero = {
+export type CampusCodePaletteName = "cobalt" | "aurora" | "nebula" | "solar"
+export type CampusCodeHero = {
   /** The bubble-filled wordmark. Short words read best. */
   wordmark: string
   issue: string
@@ -49,8 +39,8 @@ export type AstroHero = {
   /** Optional horizontal offset fraction for the wordmark on narrow screens (defaults to 0.025). */
   wordmarkNarrowX?: number
 }
-export type AstroStat = { value: string; label: string }
-export type AstroMission = {
+export type CampusCodeStat = { value: string; label: string }
+export type CampusCodeMission = {
   /** White type on the bubble band. `\n` breaks the line. */
   bandTitle: string
   kicker: string
@@ -58,9 +48,9 @@ export type AstroMission = {
   meta: string[]
   title: string
   body: string
-  stats: AstroStat[]
+  stats: CampusCodeStat[]
 }
-export type AstroProject = {
+export type CampusCodeProject = {
   code: string
   title: string
   summary: string
@@ -72,7 +62,7 @@ export type AstroProject = {
   goal?: string
   cta?: string
 }
-export type AstroProjects = {
+export type CampusCodeProjects = {
   /** Oversized type behind the ribbons. `\n` breaks the line. */
   title: string
   issue: string
@@ -81,7 +71,7 @@ export type AstroProjects = {
   body: string
   heading: string
 }
-export type AstroNight = {
+export type CampusCodeNight = {
   /** ISO date, "2026-11-14". */
   date: string
   time: string
@@ -94,8 +84,8 @@ export type AstroNight = {
   seats?: number
   going?: number
 }
-export type AstroTier = { name: string; price: string; period?: string; blurb: string; perks: string[]; featured?: boolean }
-export type AstroJoin = {
+export type CampusCodeTier = { name: string; price: string; period?: string; blurb: string; perks: string[]; featured?: boolean }
+export type CampusCodeJoin = {
   tag: string
   title: string
   body: string
@@ -105,39 +95,39 @@ export type AstroJoin = {
   /** `{name}` is replaced with the member's first name. */
   success: string
 }
-export type AstroFooter = { bandTitle: string; tagline: string; credit: string; links: { label: string; href: string }[] }
-export type AstroMember = { name: string; email: string; tier: string; number: string }
+export type CampusCodeFooter = { bandTitle: string; tagline: string; credit: string; links: { label: string; href: string }[] }
+export type CampusCodeMember = { name: string; email: string; tier: string; number: string }
 
-export type AstroAssociationTemplateProps = {
+export type CampusCodeProps = {
   /** Shown in the nav and on the member card. */
   brand?: string
-  nav?: AstroNavLink[]
+  nav?: CampusCodeNavLink[]
   navCta?: string
   navLoginCta?: string
   onNavLogin?: () => void
-  hero?: Partial<AstroHero>
-  mission?: Partial<AstroMission>
-  projects?: AstroProject[]
-  projectsCopy?: Partial<AstroProjects>
+  hero?: Partial<CampusCodeHero>
+  mission?: Partial<CampusCodeMission>
+  projects?: CampusCodeProject[]
+  projectsCopy?: Partial<CampusCodeProjects>
   nightsTag?: string
   nightsTitle?: string
-  nights?: AstroNight[]
-  tiers?: AstroTier[]
-  join?: Partial<AstroJoin>
-  footer?: Partial<AstroFooter>
+  nights?: CampusCodeNight[]
+  tiers?: CampusCodeTier[]
+  join?: Partial<CampusCodeJoin>
+  footer?: Partial<CampusCodeFooter>
   /** A preset name or your own palette. */
-  palette?: AstroPaletteName | AstroPalette
+  palette?: CampusCodePaletteName | CampusCodePalette
   /** Swatches in the nav that let visitors re-colour the page. */
   paletteSwitcher?: boolean
-  onPaletteChange?: (palette: AstroPalette) => void
+  onPaletteChange?: (palette: CampusCodePalette) => void
   /** Starting arrangement of every bubble field. Any integer. */
   seed?: number
   onPop?: (total: number) => void
   onNavCta?: () => void
-  onContribute?: (project: AstroProject) => void
-  onRsvp?: (night: AstroNight, going: boolean) => void
+  onContribute?: (project: CampusCodeProject) => void
+  onRsvp?: (night: CampusCodeNight, going: boolean) => void
   /** A rejected promise shows an error. */
-  onJoin?: (member: AstroMember) => void | Promise<unknown>
+  onJoin?: (member: CampusCodeMember) => void | Promise<unknown>
   onViewDashboard?: () => void
   /** Whether to play the cool entry animation on initial load. Defaults to true. */
   entryAnimation?: boolean
@@ -196,7 +186,7 @@ function easeOutCubic(t: number): number {
   return 1 - Math.pow(1 - c, 3)
 }
 
-// "ASTRO.\nASSOCiATION" → lines. A literal backslash-n counts too, since
+// "CAMPUS.\nCODE" → lines. A literal backslash-n counts too, since
 // that's what "\n" becomes in a JSX attribute.
 function lines(s: string): string[] {
   return s.split(/\n|\\n/).filter((l) => l.length > 0)
@@ -341,7 +331,7 @@ function unwrapAngle(prev: number, next: number): number {
 
 /* ---------------------------------------------------------------- palettes */
 
-const PALETTES: Record<AstroPaletteName, AstroPalette> = {
+const PALETTES: Record<CampusCodePaletteName, CampusCodePalette> = {
   cobalt: {
     name: "Cobalt",
     accent: "#2233ff",
@@ -367,34 +357,34 @@ const PALETTES: Record<AstroPaletteName, AstroPalette> = {
     colors: ["#ff5a1f", "#e23d00", "#ff7a00", "#ffa400", "#ffd23f", "#ff3d6e", "#ff8f6b", "#ffe08a", "#fff1cc", "#b52a00", "#ff5fa2", "#ffc2a1"],
   },
 }
-const PALETTE_ORDER: AstroPaletteName[] = ["cobalt", "aurora", "nebula", "solar"]
+const PALETTE_ORDER: CampusCodePaletteName[] = ["cobalt", "aurora", "nebula", "solar"]
 const SECTION_KEYS = ["home", "mission", "projects", "nights", "join"]
 
 /* ---------------------------------------------------------------- defaults */
 
-const D_NAV: AstroNavLink[] = [
+const D_NAV: CampusCodeNavLink[] = [
   { label: "Mission", target: "mission" },
   { label: "Projects", target: "projects" },
   { label: "Nights", target: "nights" },
   { label: "Join", target: "join" },
 ]
 
-const D_HERO: AstroHero = {
-  wordmark: "Astro",
+const D_HERO: CampusCodeHero = {
+  wordmark: "CampusCode",
   issue: "#102",
-  title: "ASTRO.\nASSOCiATION",
+  title: "CAMPUS.\nCODE",
   blurb:
     "Interplanetary exploration can be carried out by many means, from spacecraft and telescopes to a folding chair in a dark field. We do the last part together, every clear night.",
-  credit: "Astro Association · Project designed by its members",
+  credit: "CampusCode · The Student Hackathon Arena",
   primaryCta: "Join the association",
   secondaryCta: "Tonight's sky",
   hint: "Click the bubbles. They pop.",
 }
 
-const D_MISSION: AstroMission = {
-  bandTitle: "ASTRO.\nASSOCiATION",
-  kicker: "ASTRO. ASSOCIATION PROJECT",
-  meta: ["Astro. Association project", "#102 daily design", "Designed by members"],
+const D_MISSION: CampusCodeMission = {
+  bandTitle: "CAMPUS.\nCODE",
+  kicker: "CAMPUSCODE PROJECT",
+  meta: ["CampusCode Arena", "#102 daily design", "Designed by members"],
   title: "A club for people who keep looking up.",
   body:
     "We are amateurs in the old sense of the word: we do it for love. Members share telescopes, drive each other to dark sites, log what they see and turn it into open data that real observatories use. No experience needed — just curiosity and a warm coat.",
@@ -406,7 +396,7 @@ const D_MISSION: AstroMission = {
   ],
 }
 
-const D_PROJECTS: AstroProject[] = [
+const D_PROJECTS: CampusCodeProject[] = [
   {
     code: "#099",
     title: "Dark-Sky Census",
@@ -453,10 +443,10 @@ const D_PROJECTS: AstroProject[] = [
   },
 ]
 
-const D_PROJECTS_COPY: AstroProjects = {
-  title: "ASTRO\nASSOCiATION",
+const D_PROJECTS_COPY: CampusCodeProjects = {
+  title: "CAMPUS\nCODE",
   issue: "102",
-  ribbonText: "astro. association",
+  ribbonText: "campuscode arena",
   heading: "Projects, numbered like issues.",
   body:
     "Interplanetary exploration projects can be carried out using a variety of means and equipment. They require a large amount of patient observation, and they require international cooperation and joint efforts.",
@@ -468,7 +458,7 @@ function inDays(n: number): string {
   return isoDay(d)
 }
 
-const D_NIGHTS: AstroNight[] = [
+const D_NIGHTS: CampusCodeNight[] = [
   { date: inDays(4), time: "20:30", title: "Saturn & the autumn sky", place: "Hilltop field, north gate", kind: "Star party", target: "Saturn's rings", seats: 40, going: 27 },
   { date: inDays(9), time: "19:00", title: "How to read a star chart", place: "Library annex, room 2", kind: "Workshop", target: "Planisphere basics", seats: 18, going: 15 },
   { date: inDays(16), time: "21:00", title: "Deep-sky marathon", place: "Dark site, 40 min drive", kind: "Star party", target: "Andromeda galaxy", seats: 24, going: 9 },
@@ -476,7 +466,7 @@ const D_NIGHTS: AstroNight[] = [
   { date: inDays(30), time: "22:00", title: "Meteor shower watch", place: "Hilltop field, north gate", kind: "Star party", target: "Peak hour radiant", seats: 60, going: 31 },
 ]
 
-const D_TIERS: AstroTier[] = [
+const D_TIERS: CampusCodeTier[] = [
   { name: "Stargazer", price: "Free", blurb: "For the curious.", perks: ["Monthly sky notes", "Public star parties", "Members' forum"] },
   {
     name: "Observer",
@@ -486,10 +476,10 @@ const D_TIERS: AstroTier[] = [
     perks: ["Everything in Stargazer", "Telescope lending library", "Dark-site trips", "Project #102 access"],
     featured: true,
   },
-  { name: "Patron", price: "€18", period: "/mo", blurb: "Keeps the domes open.", perks: ["Everything in Observer", "Your name on the dome wall", "Astrophoto workshops", "Two guest passes"] },
+  { name: "Patron", price: "₹499", period: "/mo", blurb: "Supports the arena.", perks: ["Everything in Pro", "Featured team profile", "Advanced builder workshops", "Two guest passes"] },
 ]
 
-const D_JOIN: AstroJoin = {
+const D_JOIN: CampusCodeJoin = {
   tag: "Membership",
   title: "Get your card. Find everything.",
   body: "Pick a tier, type your name and watch your card print. You can change tiers any time.",
@@ -499,8 +489,8 @@ const D_JOIN: AstroJoin = {
   success: "Welcome aboard, {name}. Your card is in your inbox.",
 }
 
-const D_FOOTER: AstroFooter = {
-  bandTitle: "ASTRO.\nASSOCiATION",
+const D_FOOTER: CampusCodeFooter = {
+  bandTitle: "CAMPUS.\nCODE",
   tagline: "ALL WE CAN FOUND.  ALL CAN BE FOUND.",
   credit: "AASS. PROJECT · DESIGNED BY ITS MEMBERS",
   links: [
@@ -842,6 +832,188 @@ html,body{background:#ffffff!important;color:#0b0c16!important}
 @keyframes cc-fade-up{0%{opacity:0;transform:translateY(14px)}100%{opacity:1;transform:translateY(0)}}
 @keyframes cc-pulse-glow{0%,100%{opacity:.35;transform:scale(1)}50%{opacity:.75;transform:scale(1.15)}}
 @keyframes cc-spin{to{transform:rotate(360deg)}}
+
+/* ── CampusCode Video Spotlight ── */
+.cc-video-card {
+  position: relative;
+  background: rgba(8, 14, 22, 0.76);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+  border: 1.5px solid rgba(255, 255, 255, 0.12);
+  border-radius: clamp(22px, 2.8cqi, 32px);
+  padding: clamp(14px, 2cqi, 20px);
+  box-shadow: 
+    0 28px 75px -15px rgba(0, 0, 0, 0.85),
+    0 0 45px rgba(93, 107, 255, 0.14),
+    0 0 70px rgba(47, 229, 158, 0.08);
+  transition: all .35s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+}
+.cc-video-card:hover {
+  border-color: rgba(47, 229, 158, 0.38);
+  box-shadow: 
+    0 35px 90px -15px rgba(0, 0, 0, 0.92),
+    0 0 60px rgba(93, 107, 255, 0.22),
+    0 0 85px rgba(47, 229, 158, 0.2);
+  transform: translateY(-2px);
+}
+.cc-video-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 4px 6px clamp(12px, 1.5cqi, 16px);
+  flex-wrap: wrap;
+}
+.cc-video-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.cc-video-pulse {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #2fe59e;
+  box-shadow: 0 0 10px #2fe59e;
+  animation: ccPulse 2s infinite;
+}
+@keyframes ccPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.85); }
+}
+.cc-video-kicker {
+  font-family: var(--aa-display);
+  font-size: 11.5px;
+  font-weight: 800;
+  letter-spacing: .12em;
+  color: var(--aa-blue, #5d6bff);
+  text-transform: uppercase;
+}
+.cc-video-audio-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: #ffffff;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-family: var(--aa-display);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .06em;
+  cursor: pointer;
+  transition: all .2s;
+}
+.cc-video-audio-btn:hover {
+  background: rgba(47, 229, 158, 0.18);
+  border-color: rgba(47, 229, 158, 0.4);
+  color: #2fe59e;
+}
+.cc-video-audio-btn[data-active="true"] {
+  background: rgba(47, 229, 158, 0.2);
+  border-color: rgba(47, 229, 158, 0.5);
+  color: #2fe59e;
+  box-shadow: 0 0 16px rgba(47, 229, 158, 0.3);
+}
+.cc-video-eq {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 2.5px;
+  height: 12px;
+}
+.cc-video-bar {
+  width: 2.5px;
+  background: #2fe59e;
+  border-radius: 2px;
+}
+.cc-video-bar:nth-child(1) { animation: ccEq1 0.7s infinite ease-in-out; }
+.cc-video-bar:nth-child(2) { animation: ccEq2 0.5s infinite ease-in-out; }
+.cc-video-bar:nth-child(3) { animation: ccEq3 0.6s infinite ease-in-out; }
+
+@keyframes ccEq1 { 0%, 100% { height: 3px; } 50% { height: 11px; } }
+@keyframes ccEq2 { 0%, 100% { height: 12px; } 50% { height: 4px; } }
+@keyframes ccEq3 { 0%, 100% { height: 6px; } 50% { height: 12px; } }
+
+.cc-video-viewport {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: clamp(14px, 2cqi, 22px);
+  overflow: hidden;
+  background: #000000;
+  cursor: pointer;
+}
+.cc-video-player {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.cc-video-paused-badge {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(10px);
+  border: 1.5px solid rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+.cc-video-foot-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 30px 24px 18px;
+  background: linear-gradient(to top, rgba(6, 10, 16, 0.88) 0%, rgba(6, 10, 16, 0.4) 60%, transparent 100%);
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  pointer-events: none;
+}
+.cc-video-foot-title {
+  font-family: var(--aa-display);
+  font-size: clamp(15px, 1.8cqi, 20px);
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: -0.01em;
+}
+.cc-video-foot-sub {
+  font-family: var(--aa-mono);
+  font-size: 11px;
+  color: #a4b7ca;
+  letter-spacing: .04em;
+  margin-top: 4px;
+}
+.cc-video-pill-tag {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: #ffffff;
+  font-family: var(--aa-display);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .08em;
+  padding: 4px 10px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+@media (max-width: 640px) {
+  .cc-video-foot-overlay {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
 }
 `
 
@@ -1619,10 +1791,141 @@ function CampusCodeEntryAnimation({
   )
 }
 
+/* ----------------------------------------------------------------- video spotlight */
+
+function CampusCodeVideoSpotlight() {
+  const videoRef = React.useRef<HTMLVideoElement>(null)
+  const [isHovered, setIsHovered] = React.useState(false)
+  const [isMuted, setIsMuted] = React.useState(true)
+  const [isPlaying, setIsPlaying] = React.useState(true)
+
+  const handleMouseEnter = () => {
+    setIsHovered(true)
+    if (videoRef.current) {
+      videoRef.current.muted = false
+      videoRef.current.volume = 1
+      setIsMuted(false)
+      videoRef.current.play().catch(() => {})
+    }
+  }
+
+  const handleMouseLeave = () => {
+    setIsHovered(false)
+    if (videoRef.current) {
+      videoRef.current.muted = true
+      setIsMuted(true)
+    }
+  }
+
+  const handleToggleSound = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    if (videoRef.current) {
+      const nextMuted = !videoRef.current.muted
+      videoRef.current.muted = nextMuted
+      setIsMuted(nextMuted)
+      if (!nextMuted) {
+        videoRef.current.volume = 1
+        videoRef.current.play().catch(() => {})
+      }
+    }
+  }
+
+  const handleTogglePlay = () => {
+    if (videoRef.current) {
+      if (videoRef.current.paused) {
+        videoRef.current.play().catch(() => {})
+        setIsPlaying(true)
+      } else {
+        videoRef.current.pause()
+        setIsPlaying(false)
+      }
+    }
+  }
+
+  return (
+    <div
+      className="cc-video-card"
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
+      {/* Top Header inside card */}
+      <div className="cc-video-topbar">
+        <div className="cc-video-left">
+          <span className="cc-video-pulse" />
+          <span className="cc-video-kicker">SPOTLIGHT FILM · WHAT IS CAMPUSCODE</span>
+        </div>
+        <button
+          type="button"
+          className="cc-video-audio-btn"
+          data-active={!isMuted ? "true" : "false"}
+          onClick={handleToggleSound}
+          title={isMuted ? "Hover to hear sound (or click)" : "Click to mute"}
+        >
+          {isMuted ? (
+            <>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M11 5L6 9H2v6h4l5 4V5z" />
+                <line x1="23" y1="9" x2="17" y2="15" />
+                <line x1="17" y1="9" x2="23" y2="15" />
+              </svg>
+              <span>HOVER FOR SOUND</span>
+            </>
+          ) : (
+            <>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M11 5L6 9H2v6h4l5 4V5z" />
+                <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07" />
+              </svg>
+              <span>SOUND ACTIVE</span>
+              <span className="cc-video-eq">
+                <span className="cc-video-bar" />
+                <span className="cc-video-bar" />
+                <span className="cc-video-bar" />
+              </span>
+            </>
+          )}
+        </button>
+      </div>
+
+      {/* Video Viewport */}
+      <div className="cc-video-viewport" onClick={handleTogglePlay}>
+        <video
+          ref={videoRef}
+          src="/what-is-campuscode.mp4"
+          autoPlay
+          loop
+          muted
+          playsInline
+          preload="auto"
+          className="cc-video-player"
+        />
+
+        {/* Play/Pause overlay indicator if paused */}
+        {!isPlaying && (
+          <div className="cc-video-paused-badge">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
+              <polygon points="5 3 19 12 5 21 5 3" />
+            </svg>
+          </div>
+        )}
+
+        {/* Ambient bottom overlay banner */}
+        <div className="cc-video-foot-overlay">
+          <div>
+            <div className="cc-video-foot-title">CampusCode: The Student Hackathon Arena</div>
+            <div className="cc-video-foot-sub">Individual tracking · Multi-round evaluation · Industry bounties</div>
+          </div>
+          <div className="cc-video-pill-tag">OFFICIAL FILM</div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 /* ----------------------------------------------------------------- template */
 
-export default function AstroAssociationTemplate({
-  brand = "ASTRO.",
+export default function CampusCode({
+  brand = "CampusCode",
   nav = D_NAV,
   navCta = "Join",
   navLoginCta,
@@ -1655,7 +1958,7 @@ export default function AstroAssociationTemplate({
   height = "100svh",
   className = "",
   entryAnimation = true,
-}: AstroAssociationTemplateProps) {
+}: CampusCodeProps) {
   const [showIntro, setShowIntro] = React.useState(entryAnimation)
   const [introExiting, setIntroExiting] = React.useState(false)
   const uid = "aa" + React.useId().replace(/[^a-zA-Z0-9]/g, "")
@@ -1676,7 +1979,7 @@ export default function AstroAssociationTemplate({
     const list = PALETTE_ORDER.map((k) => PALETTES[k])
     return typeof palette === "string" ? list : [palette, ...list]
   }, [palKey])
-  const pickPalette = (p: AstroPalette) => {
+  const pickPalette = (p: CampusCodePalette) => {
     setPal(p)
     onPaletteChange?.(p)
   }
@@ -1829,7 +2132,7 @@ export default function AstroAssociationTemplate({
   const [kind, setKind] = React.useState("All")
   const [going, setGoing] = React.useState({} as Record<string, boolean>)
   const shown = nights.map((n, i) => ({ n, i })).filter(({ n }) => kind === "All" || n.kind === kind)
-  const toggleRsvp = (n: AstroNight, i: number) => {
+  const toggleRsvp = (n: CampusCodeNight, i: number) => {
     const key = n.date + i
     const next = !going[key]
     setGoing((g) => ({ ...g, [key]: next }))
@@ -2134,7 +2437,7 @@ export default function AstroAssociationTemplate({
     setStatus("loading")
     setMsg("Printing your card…")
     try {
-      const member: AstroMember = { name: name.trim(), email: email.trim(), tier: chosen?.name ?? "", number }
+      const member: CampusCodeMember = { name: name.trim(), email: email.trim(), tier: chosen?.name ?? "", number }
       if (onJoin) await onJoin(member)
       else await new Promise((r) => setTimeout(r, 600))
       setStatus("done")
@@ -2183,7 +2486,7 @@ export default function AstroAssociationTemplate({
     "--aa-mono": fonts?.mono ?? FONT_MONO,
   } as React.CSSProperties
 
-  const navLink = (l: AstroNavLink, i: number) => {
+  const navLink = (l: CampusCodeNavLink, i: number) => {
     const internal = SECTION_KEYS.includes(l.target)
     return (
       <a
@@ -2507,6 +2810,13 @@ export default function AstroAssociationTemplate({
                 )
               })}
             </div>
+          </div>
+        </section>
+
+        {/* --------------------------------------------------------- video spotlight */}
+        <section className="aa-sec" style={{ paddingTop: 0, paddingBottom: "clamp(36px, 5cqi, 64px)" }}>
+          <div className="aa-in">
+            <CampusCodeVideoSpotlight />
           </div>
         </section>
 
@@ -2853,7 +3163,25 @@ export default function AstroAssociationTemplate({
             {F.links.length > 0 && (
               <nav className="aa-foot-links" aria-label="Footer">
                 {F.links.map((l, i) => (
-                  <a key={i} href={l.href}>
+                  <a
+                    key={i}
+                    href={l.href}
+                    onClick={(e) => {
+                      if (l.href?.startsWith("#")) {
+                        const targetId = l.href.slice(1)
+                        if (sections.current[targetId]) {
+                          e.preventDefault()
+                          scrollTo(targetId)
+                        } else if (targetId === "rules" || targetId === "developers" || targetId === "faq") {
+                          e.preventDefault()
+                          scrollTo("projects")
+                        } else if (targetId === "support" || targetId === "contact" || targetId === "terms" || targetId === "privacy") {
+                          e.preventDefault()
+                          scrollTo("join")
+                        }
+                      }
+                    }}
+                  >
                     {l.label}
                   </a>
                 ))}
@@ -2876,3 +3204,4 @@ export default function AstroAssociationTemplate({
     </div>
   )
 }
+

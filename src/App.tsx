@@ -1,19 +1,19 @@
 import * as React from "react"
-import AstroAssociationTemplate from "./components/astro-association-template"
+import CampusCode from "./components/campuscode"
 import LoginPage from "./pages/LoginPage"
 import RegisterPage from "./pages/RegisterPage"
 import DashboardPage from "./pages/DashboardPage"
 import type {
-  AstroNavLink,
-  AstroHero,
-  AstroMission,
-  AstroProject,
-  AstroProjects,
-  AstroNight,
-  AstroTier,
-  AstroJoin,
-  AstroFooter,
-} from "./components/astro-association-template"
+  CampusCodeNavLink,
+  CampusCodeHero,
+  CampusCodeMission,
+  CampusCodeProject,
+  CampusCodeProjects,
+  CampusCodeNight,
+  CampusCodeTier,
+  CampusCodeJoin,
+  CampusCodeFooter,
+} from "./components/campuscode"
 
 // ── CampusCode · Hackathon Arena ──────────────────────────────────────────────
 
@@ -23,14 +23,14 @@ function inDays(n: number): string {
   return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0")
 }
 
-const nav: AstroNavLink[] = [
+const nav: CampusCodeNavLink[] = [
   { label: "About", target: "mission" },
   { label: "How it Works", target: "projects" },
   { label: "Hackathons", target: "nights" },
   { label: "Community", target: "join" },
 ]
 
-const hero: Partial<AstroHero> = {
+const hero: Partial<CampusCodeHero> = {
   wordmark: "CampusCode",
   issue: "#001",
   title: "BUILD\nCOMPETE\nSHIP.",
@@ -42,7 +42,7 @@ const hero: Partial<AstroHero> = {
   hint: "CAMPUSCODE / 001",
 }
 
-const mission: Partial<AstroMission> = {
+const mission: Partial<CampusCodeMission> = {
   bandTitle: "CAMPUS\nCODE",
   kicker: "CAMPUSCODE PROJECT",
   meta: ["CampusCode — Chennai · India", "#001 Hackathon Arena", "Built for student builders"],
@@ -57,7 +57,7 @@ const mission: Partial<AstroMission> = {
   ],
 }
 
-const projects: AstroProject[] = [
+const projects: CampusCodeProject[] = [
   {
     code: "#01",
     title: "AI Innovation",
@@ -104,7 +104,7 @@ const projects: AstroProject[] = [
   },
 ]
 
-const projectsCopy: Partial<AstroProjects> = {
+const projectsCopy: Partial<CampusCodeProjects> = {
   title: "CAMPUS\nCODE",
   issue: "001",
   ribbonText: "campuscode · hackathon arena",
@@ -113,7 +113,7 @@ const projectsCopy: Partial<AstroProjects> = {
     "Discover a challenge, team up with people who share your ambition, turn your idea into something people can use, then submit your work and take it to the arena.",
 }
 
-const nights: AstroNight[] = [
+const nights: CampusCodeNight[] = [
   { date: inDays(2), time: "10:00", title: "AI Innovation Hackathon", place: "Anna University, Chennai", kind: "Hackathon", target: "Artificial Intelligence", seats: 200, going: 148 },
   { date: inDays(7), time: "09:00", title: "Future Web Challenge", place: "IIT Madras Research Park", kind: "Hackathon", target: "Web Development", seats: 150, going: 112 },
   { date: inDays(14), time: "11:00", title: "Campus Tech Sprint", place: "SRM University, Kattankulathur", kind: "Hackathon", target: "Smart Technology", seats: 100, going: 67 },
@@ -121,7 +121,7 @@ const nights: AstroNight[] = [
   { date: inDays(30), time: "09:30", title: "Open Innovation Hackathon", place: "VIT Chennai Campus", kind: "Hackathon", target: "Open Track", seats: 300, going: 189 },
 ]
 
-const tiers: AstroTier[] = [
+const tiers: CampusCodeTier[] = [
   {
     name: "Student",
     price: "Free",
@@ -145,7 +145,7 @@ const tiers: AstroTier[] = [
   },
 ]
 
-const join: Partial<AstroJoin> = {
+const join: Partial<CampusCodeJoin> = {
   tag: "Membership",
   title: "Get your card. Find your team.",
   body: "Pick a tier, enter your name and watch your CampusCode card print. You can change tiers any time.",
@@ -155,7 +155,7 @@ const join: Partial<AstroJoin> = {
   success: "Welcome to the arena, {name}. Your card is on its way.",
 }
 
-const footer: Partial<AstroFooter> = {
+const footer: Partial<CampusCodeFooter> = {
   bandTitle: "CAMPUS\nCODE",
   tagline: "THE STUDENT HACKATHON ARENA.  YOU BUILD THE IDEA, WE RUN THE COMPETITION.",
   credit: "CAMPUSCODE · CHENNAI, INDIA · HACKATHON ARENA",
@@ -178,44 +178,80 @@ const footer: Partial<AstroFooter> = {
 }
 
 type Page = "landing" | "login" | "register" | "dashboard"
-type User = { name: string; email: string; college?: string }
+type User = { name: string; email: string; college?: string; avatar?: string }
 
 export default function App() {
   const [page, setPage] = React.useState<Page>("landing")
-  const [user, setUser] = React.useState<User | null>({
-    name: "Sai Harshit",
-    email: "spacex@campuscode.co.in",
-    college: "Anna University",
+  const [user, setUser] = React.useState<User | null>(() => {
+    try {
+      const saved = localStorage.getItem("campuscode_user")
+      return saved ? JSON.parse(saved) : null
+    } catch {
+      return null
+    }
   })
 
   // Quick navigation handler from any component or link hash
   React.useEffect(() => {
     const handleHash = () => {
       const h = window.location.hash.toLowerCase()
-      if (h === "#login") setPage("login")
-      else if (h === "#register" || h === "#join") setPage("register")
-      else if (h === "#dashboard") setPage("dashboard")
-      else if (h === "#home") setPage("landing")
+      if (h === "#login") {
+        setPage("login")
+      } else if (h === "#register" || h === "#join") {
+        setPage("register")
+      } else if (h === "#dashboard") {
+        // AUTH GUARD: Do not allow direct redirect or access to dashboard without login
+        const loggedUser = user || (() => {
+          try {
+            const saved = localStorage.getItem("campuscode_user")
+            return saved ? JSON.parse(saved) : null
+          } catch {
+            return null
+          }
+        })()
+
+        if (!loggedUser) {
+          setPage("login")
+          window.location.hash = "#login"
+        } else {
+          setPage("dashboard")
+        }
+      } else if (h === "#home") {
+        setPage("landing")
+      }
     }
+
     handleHash()
     window.addEventListener("hashchange", handleHash)
     return () => window.removeEventListener("hashchange", handleHash)
-  }, [])
+  }, [user])
 
   if (page === "login") {
     return (
       <LoginPage
         onLogin={async (email) => {
           const derivedName = email.includes("@") ? email.split("@")[0] : email
-          setUser({
+          const newUser: User = {
             name: derivedName.charAt(0).toUpperCase() + derivedName.slice(1),
             email,
             college: "Anna University",
-          })
+            avatar: "/avatar.png",
+          }
+          setUser(newUser)
+          try {
+            localStorage.setItem("campuscode_user", JSON.stringify(newUser))
+          } catch { }
           setPage("dashboard")
+          window.location.hash = "#dashboard"
         }}
-        onGoRegister={() => setPage("register")}
-        onGoHome={() => setPage("landing")}
+        onGoRegister={() => {
+          setPage("register")
+          window.location.hash = "#register"
+        }}
+        onGoHome={() => {
+          setPage("landing")
+          window.location.hash = ""
+        }}
       />
     )
   }
@@ -224,37 +260,91 @@ export default function App() {
     return (
       <RegisterPage
         onRegister={async (data) => {
-          setUser({
+          const newUser: User = {
             name: data.name || "Student Builder",
             email: data.email,
-            college: data.college,
-          })
+            college: data.college || "Anna University",
+            avatar: "/avatar.png",
+          }
+          setUser(newUser)
+          try {
+            localStorage.setItem("campuscode_user", JSON.stringify(newUser))
+          } catch { }
           setPage("dashboard")
+          window.location.hash = "#dashboard"
         }}
-        onGoLogin={() => setPage("login")}
-        onGoHome={() => setPage("landing")}
+        onGoLogin={() => {
+          setPage("login")
+          window.location.hash = "#login"
+        }}
+        onGoHome={() => {
+          setPage("landing")
+          window.location.hash = ""
+        }}
       />
     )
   }
 
   if (page === "dashboard") {
+    // AUTH GUARD: Strictly forbid rendering dashboard if not logged in
+    if (!user) {
+      return (
+        <LoginPage
+          onLogin={async (email) => {
+            const derivedName = email.includes("@") ? email.split("@")[0] : email
+            const newUser: User = {
+              name: derivedName.charAt(0).toUpperCase() + derivedName.slice(1),
+              email,
+              college: "Anna University",
+              avatar: "/avatar.png",
+            }
+            setUser(newUser)
+            try {
+              localStorage.setItem("campuscode_user", JSON.stringify(newUser))
+            } catch { }
+            setPage("dashboard")
+            window.location.hash = "#dashboard"
+          }}
+          onGoRegister={() => {
+            setPage("register")
+            window.location.hash = "#register"
+          }}
+          onGoHome={() => {
+            setPage("landing")
+            window.location.hash = ""
+          }}
+        />
+      )
+    }
+
     return (
       <DashboardPage
-        user={user ?? { name: "Sai Harshit", email: "spacex@campuscode.co.in", college: "Anna University" }}
+        user={user}
         onLogout={() => {
+          try {
+            localStorage.removeItem("campuscode_user")
+          } catch { }
+          setUser(null)
           setPage("landing")
+          window.location.hash = ""
         }}
-        onGoHome={() => setPage("landing")}
+        onGoHome={() => {
+          setPage("landing")
+          window.location.hash = ""
+        }}
       />
     )
   }
 
   return (
-    <AstroAssociationTemplate
+    <CampusCode
       brand="CampusCode"
       navCta="Join CampusCode ↗"
       navLoginCta="Login"
-      onNavLogin={() => setPage("login")}
+      onNavLogin={() => {
+        setPage("login")
+        window.location.hash = "#login"
+      }}
       nav={nav}
       hero={hero}
       mission={mission}
@@ -269,7 +359,10 @@ export default function App() {
       palette="cobalt"
       paletteSwitcher={true}
       defaultTheme="system"
-      onNavCta={() => setPage("register")}
+      onNavCta={() => {
+        setPage("register")
+        window.location.hash = "#register"
+      }}
       onJoin={(member) => {
         const isFullEmail = member.email.includes("@")
         const collegeName = isFullEmail
@@ -279,13 +372,28 @@ export default function App() {
           ? member.email
           : `${member.name.toLowerCase().replace(/\s+/g, "")}@${member.email.toLowerCase()}.edu.in`
 
-        setUser({
+        const newUser: User = {
           name: member.name,
           email: userEmail,
-          college: collegeName || "JKLU",
-        })
+          college: collegeName || "Anna University",
+          avatar: "/avatar.png",
+        }
+        setUser(newUser)
+        try {
+          localStorage.setItem("campuscode_user", JSON.stringify(newUser))
+        } catch { }
+        setPage("dashboard")
+        window.location.hash = "#dashboard"
       }}
-      onViewDashboard={() => setPage("dashboard")}
+      onViewDashboard={() => {
+        if (user) {
+          setPage("dashboard")
+          window.location.hash = "#dashboard"
+        } else {
+          setPage("login")
+          window.location.hash = "#login"
+        }
+      }}
     />
   )
 }
