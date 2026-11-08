@@ -17,6 +17,10 @@
   Featuring an Obsidian-Emerald dark aesthetic, interactive canvas particles, sound-reactive video showcase, AI-driven team matchmaking, live round tracking, and cryptographically verified digital ID passes.
 </p>
 
+<p align="center">
+  <a href="./JUDGES_NOTES.md"><b>📖 Read the Full Technical Evaluation Dossier for Judges →</b></a>
+</p>
+
 ---
 
 </div>
